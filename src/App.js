@@ -2,16 +2,24 @@ import React, { useState, Fragment } from 'react'
 import AddUserForm from './forms/AddUserForm'
 import EditUserForm from './forms/EditUserForm'
 import UserTable from './tables/UserTable'
-
+import MyComponent from "./forms/MyComponent";
+import axios from "axios";
 const App = () => {
 	// Data
-	const usersData = [
-		{ id: 1, name: 'Tania', username: 'floppydiskette' },
-		{ id: 2, name: 'Craig', username: 'siliconeidolon' },
-		{ id: 3, name: 'Ben', username: 'benisphere' },
-	]
-
-	const initialFormState = { id: null, name: '', username: '' }
+	/*var usersData = [
+		{ id: 1, title: 'Tania', content: 'floppydiskette' },
+		{ id: 2, title: 'Craig', content: 'siliconeidolon' },
+		{ id: 3, title: 'Ben', content: 'benisphere' },
+	]*/
+	let usersData = [];
+	debugger
+	axios.get("http://localhost:2525/api/notes",
+				{ headers: {'Access-Control-Allow-Origin': '*'}}
+			).then(function(response){
+		usersData.push(response.data);
+	})
+	console.log(usersData)
+	const initialFormState = { id: null, title: '', content: '' }
 
 	// Setting state
 	const [ users, setUsers ] = useState(usersData)
@@ -39,17 +47,17 @@ const App = () => {
 	const editRow = user => {
 		setEditing(true)
 
-		setCurrentUser({ id: user.id, name: user.name, username: user.username })
+		setCurrentUser({ id: user.id, title: user.title, content: user.content })
 	}
-
 	return (
 		<div className="container">
-			<h1>CRUD App with Hooks</h1>
+			<h1>Simple Notes App by Saeed Murrad</h1>
+			<MyComponent />
 			<div className="flex-row">
 				<div className="flex-large">
 					{editing ? (
 						<Fragment>
-							<h2>Edit user</h2>
+							<h2>Edit Note</h2>
 							<EditUserForm
 								editing={editing}
 								setEditing={setEditing}
@@ -59,13 +67,13 @@ const App = () => {
 						</Fragment>
 					) : (
 						<Fragment>
-							<h2>Add user</h2>
+							<h2>Add Note</h2>
 							<AddUserForm addUser={addUser} />
 						</Fragment>
 					)}
 				</div>
 				<div className="flex-large">
-					<h2>View users</h2>
+					<h2>View Notes</h2>
 					<UserTable users={users} editRow={editRow} deleteUser={deleteUser} />
 				</div>
 			</div>

@@ -1,13 +1,46 @@
-# React Hooks Tutorial
+# Notes Simple App created by Saeed Murrad
+A simple app that interacts with REST API to perform actions on Notes.
 
-In this tutorial, we'll make a simple CRUD app that can add, update, or delete users.
+## Create ECR Repository
 
-### [View the demo](https://taniarascia.github.io/react-hooks/) | [Read the tutorial](https://www.taniarascia.com/crud-app-in-react-with-hooks/)
+```bash
+aws ecr create-repository --repository-name react-app-saeed --region us-east-2
+```
+## Get Login
 
-## Author
+```bash
+aws ecr get-login-password | docker login --username AWS --password-stdin 097599994788.dkr.ecr.us-east-2.amazonaws.com
+```
 
-- [Tania Rascia](https://www.taniarascia.com)
+## Build Image from Docker
 
-## License
+```bash
+docker build -t react-app .
+```
 
-This project is open source and available under the [MIT License](LICENSE).
+## Tag image created to ECR Repository with URI
+
+```bash
+docker tag react-app 097599994788.dkr.ecr.us-east-2.amazonaws.com/react-app-saeed
+```
+
+
+## Push created Image to ECR
+
+```bash
+docker push 097599994788.dkr.ecr.us-east-2.amazonaws.com/react-app-saeed
+```
+
+## Pull Image from ECR
+Configure AWS CLI then get login after that run below command.
+```bash
+docker pull 097599994788.dkr.ecr.us-east-2.amazonaws.com/react-app-saeed
+```
+
+## Run React App Container
+
+```bash
+docker run -it -p 8080:80 097599994788.dkr.ecr.us-east-2.amazonaws.com/react-app-saeed
+```
+
+
